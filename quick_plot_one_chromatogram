@@ -1,1 +1,32 @@
+# Import necessary libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
 
+
+# Use this code to plot a single chromatogram - you need to complete STEP 1 only. 
+# Your data must be in the asc file format - you can do this each analysis by selecting to save data this way or you can export data as a ASC for older files. 
+
+# INPUT NEEDED: Change the file path to the path of the file you want to plot
+# copy and paste the folder navigation from where you data is then copy in the file name and .asc, it needs to be within single quote and preceeded by an r like this: r'HERE.asc'
+# STEP 1: 
+file_path = r'C:\Users\bdavies2\OneDrive\Postdoc-Imperial\4 - Raw Data\GC\Li_titration\2024May\Ar_old_blank_Ch1_02.asc'
+
+# This reads the files into DataFrames, skipping the first 26 rows 
+df_ch1 = pd.read_csv(file_path, skiprows=26, on_bad_lines='warn')
+
+# This gets the first column of the data (the second column is something SRI/PeakSimple has baseline treated, do not use)
+column1 = df_ch1.columns[0]
+
+### There is no time column in the ASC files, but you know the sampling rate (5 Hz normally, check the method file to be sure)
+# Create a new array for the x-axis using the DataFrame's index divided by 5 (for the sampling rate of 5 Hz) and then by 60 (to convert to minutes)
+x = df_ch1.index / 5 / 60
+
+# This plots the chromatogram 
+plt.figure(figsize=(10, 6))
+plt.plot(x, df_ch1[column1], label=column1)
+
+plt.xlabel('Time (minutes)')
+plt.ylabel(Signal)
+plt.legend()
+plt.show()
