@@ -10,7 +10,7 @@ import numpy as np
 # INPUT NEEDED: Change the file path to the path of the file you want to plot
 # copy and paste the folder navigation from where you data is then copy in the file name and .asc, it needs to be within single quote and preceeded by an r like this: r'HERE.asc'
 # STEP 1: 
-file_path = r'C:\Users\bdavies2\OneDrive\Postdoc-Imperial\4 - Raw Data\GC\Li_titration\2024May\Ar_old_blank_Ch1_02.asc'
+file_path = r'.asc'
 
 # This reads the files into DataFrames, skipping the first 26 rows 
 df_ch1 = pd.read_csv(file_path, skiprows=26, on_bad_lines='warn')
