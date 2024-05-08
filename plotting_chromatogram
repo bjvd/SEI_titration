@@ -1,1 +1,116 @@
+# Import necessary libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+import os
 
+### READ ME:
+### This code is useful if you want to plot multiple chromatograms and the calibration gas on the same sub-plot separated by detector (Channel1/FID and Channel2/TCD)
+### All you need to do it put in the file paths - but make sure your data is stored as ASC files (you can make this automatin in PeakSimple to store files)
+### the structure for inputting your data is filename and then lable for the legend and colour for the plot. 
+### you need to input the FID in the top seciton for Channel1 and then TCD in the second section for Channel 2. It will then make two subplots with the FID on top and TCD on the bottom. 
+
+###  FILL OUT LIKE THIS:  (r'FILE_NAME.acs', 'label for legend', 'colour for plot')
+### There are four areas you need to fill out file names, for the two different channels, and for the calibration files
+
+# STEP 1: Specify the paths to the files
+file_paths_Ch1 = [
+    (r'C:\Users\bdavies2\OneDrive\Postdoc-Imperial\4 - Raw Data\GC\Li_titration\2024May\Ar_old_blank_Ch1_04.asc', '1 mAh', 'blue'), 
+      #        r'C:\Users\bdavies2\OneDrive\Postdoc-Imperial\4 - Raw Data\GC\Li_titration\2024May\Ar_old_blank_Ch1_05.asc', 
+       #       r'C:\Users\bdavies2\OneDrive\Postdoc-Imperial\4 - Raw Data\GC\Li_titration\2024May\Ar_old_blank_Ch1_06.asc',
+              (r'C:\Users\bdavies2\OneDrive\Postdoc-Imperial\4 - Raw Data\GC\Li_titration\2024May\Ar_old_blank_Ch1_07.asc', '1 mAh - replicate', 'lightblue'),
+              (r'C:\Users\bdavies2\OneDrive\Postdoc-Imperial\4 - Raw Data\GC\Li_titration\2024May\Ar_old_blank_Ch1_08.asc', 'argon + water', 'grey')]
+
+# STEP 2: This is the calibration gas file path for Ch1
+file_paths_Ch1_calibration = (r'C:\Users\bdavies2\OneDrive\Research\Collaboration stuff\Romain\calibrationgas1000ppm_chan1_04.asc')
+df_Ch1_calibration = pd.read_csv(file_paths_Ch1_calibration, skiprows=26, on_bad_lines='warn')
+df_Ch1_calibration_column1 = df_Ch1_calibration.columns[0]
+x_df_Ch1_calibration_column1 = df_Ch1_calibration.index / 5 / 60
+
+# STEP 3: 
+file_paths_Ch2 = [
+    (r'C:\Users\bdavies2\OneDrive\Postdoc-Imperial\4 - Raw Data\GC\Li_titration\2024May\Ar_old_blank_Ch2_04.asc', '1 mAh plated', 'blue'), 
+    #          r'C:\Users\bdavies2\OneDrive\Postdoc-Imperial\4 - Raw Data\GC\Li_titration\2024May\Ar_old_blank_Ch2_05.asc', 
+     #         r'C:\Users\bdavies2\OneDrive\Postdoc-Imperial\4 - Raw Data\GC\Li_titration\2024May\Ar_old_blank_Ch2_06.asc',
+              (r'C:\Users\bdavies2\OneDrive\Postdoc-Imperial\4 - Raw Data\GC\Li_titration\2024May\Ar_old_blank_Ch2_07.asc', '1 mAh - replicate', 'lightblue'),
+              (r'C:\Users\bdavies2\OneDrive\Postdoc-Imperial\4 - Raw Data\GC\Li_titration\2024May\Ar_old_blank_Ch2_08.asc', 'argon + water', 'grey')]
+
+# STEP 4: 
+# This is the calibration gas file path for Ch2
+file_paths_Ch2_calibration = (r'C:\Users\bdavies2\OneDrive\Research\Collaboration stuff\Romain\calibrationgas1000ppm_chan2_04.asc')
+df_Ch2_calibration = pd.read_csv(file_paths_Ch2_calibration, skiprows=26, on_bad_lines='warn')
+df_Ch2_calibration_column1 = df_Ch2_calibration.columns[0]
+x_df_Ch2_calibration_column1 = df_Ch2_calibration.index / 5 / 60
+
+
+
+# The rest of the code plots the data, you do not need to edit anything in here unless your data collection rate is not 5 Hz
+##############################################################################################################################
+# Create a figure and a grid of subplots
+fig, axs = plt.subplots(2, figsize=(10, 6))
+
+# Loop over the file paths for Ch1
+for file_path, label, color in file_paths_Ch1:
+    # Read the file into a DataFrame, skipping the first 26 rows
+    df_ch1 = pd.read_csv(file_path, skiprows=26, on_bad_lines='warn')
+
+    # Get the first column
+    column1 = df_ch1.columns[0]
+
+    # Create a new array for the x-axis using the DataFrame's index divided by 5 (for the sampling rate of 5 Hz) and then by 60 (to convert to minutes)
+    x = df_ch1.index / 5 / 60  # edit the calculation if you have a different data collection rate or you want to plot as a different unit
+
+    # Get the filename from the file path
+    filename = os.path.basename(file_path)
+
+    # Plot the first column with the filename as the label on the first subplot
+    axs[0].plot(x, df_ch1.iloc[:, 0], label=label)
+    axs[0].set_ylabel('Signal')
+    axs[0].legend()
+    axs[0].set_title('TCD Ch1')
+
+ax2 = axs[0].twinx()
+ax2.set_yticks([])
+ax2.plot(x_df_Ch1_calibration_column1, df_Ch1_calibration[df_Ch1_calibration_column1], label="cal", color='black')
+ax2.legend()
+
+
+# Loop over the file paths for Ch2
+for file_path, label, color in file_paths_Ch2:
+    # Read the file into a DataFrame, skipping the first 26 rows
+    df_ch2 = pd.read_csv(file_path, skiprows=26, on_bad_lines='warn')
+
+    # Get the first column
+    column1 = df_ch2.columns[0]
+
+    # Create a new array for the x-axis using the DataFrame's index divided by 5 (for the sampling rate of 5 Hz) and then by 60 (to convert to minutes)
+    x = df_ch2.index / 5 / 60
+
+    # Get the filename from the file path
+    filename = os.path.basename(file_path)
+
+    # Plot the first column with the filename as the label on the second subplot
+    axs[1].plot(x, df_ch2.iloc[:, 0], label=label)
+    axs[1].set_xlabel('Time (minutes)')
+    axs[1].set_ylabel('Signal')
+    axs[1].legend()
+    axs[1].set_title('TCD Ch2')
+
+ax3 = axs[1].twinx()
+ax3.plot(x_df_Ch2_calibration_column1, df_Ch2_calibration[df_Ch2_calibration_column1], label="cal", color='black')
+ax3.legend()
+
+
+
+axs[0].set_xlim([0, 20])
+axs[1].set_xlim([0, 20])
+axs[0].set_yticklabels([])
+axs[1].set_yticklabels([])
+axs[0].set_xticklabels([])
+ax2.set_yticks([])
+ax3.set_yticks([])
+
+
+# Adjust the layout so that there is enough space between the subplots
+plt.tight_layout()
+plt.show()
