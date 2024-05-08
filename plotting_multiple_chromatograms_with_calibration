@@ -10,34 +10,34 @@ import os
 ### the structure for inputting your data is filename and then lable for the legend and colour for the plot. 
 ### you need to input the FID in the top seciton for Channel1 and then TCD in the second section for Channel 2. It will then make two subplots with the FID on top and TCD on the bottom. 
 
-###  FILL OUT LIKE THIS:  (r'FILE_NAME.acs', 'label for legend', 'colour for plot')
+###  FILL OUT LIKE THIS:  (r'FILE_NAME.acs', 'label for legend', 'colour for plot')  something like this: r'C:\Users\yourcomp\fodler\GC\Ar_Ch2_05.asc'
 ### There are four areas you need to fill out file names, for the two different channels, and for the calibration files
 
 # STEP 1: Specify the paths to the files
 file_paths_Ch1 = [
-    (r'C:\Users\bdavies2\OneDrive\Postdoc-Imperial\4 - Raw Data\GC\Li_titration\2024May\Ar_old_blank_Ch1_04.asc', '1 mAh', 'blue'), 
-      #        r'C:\Users\bdavies2\OneDrive\Postdoc-Imperial\4 - Raw Data\GC\Li_titration\2024May\Ar_old_blank_Ch1_05.asc', 
-       #       r'C:\Users\bdavies2\OneDrive\Postdoc-Imperial\4 - Raw Data\GC\Li_titration\2024May\Ar_old_blank_Ch1_06.asc',
-              (r'C:\Users\bdavies2\OneDrive\Postdoc-Imperial\4 - Raw Data\GC\Li_titration\2024May\Ar_old_blank_Ch1_07.asc', '1 mAh - replicate', 'lightblue'),
-              (r'C:\Users\bdavies2\OneDrive\Postdoc-Imperial\4 - Raw Data\GC\Li_titration\2024May\Ar_old_blank_Ch1_08.asc', 'argon + water', 'grey')]
+    (r'.asc', '1 mAh', 'blue'), 
+      #        r'FILE_PATH_AND_NAME.asc', 
+       #       r'FILE_PATH_AND_NAME.asc',
+              (r'FILE_PATH_AND_NAME.asc', '1 mAh - replicate', 'lightblue'),
+              (r'FILE_PATH_AND_NAME.asc', 'argon + water', 'grey')]
 
 # STEP 2: This is the calibration gas file path for Ch1
-file_paths_Ch1_calibration = (r'C:\Users\bdavies2\OneDrive\Research\Collaboration stuff\Romain\calibrationgas1000ppm_chan1_04.asc')
+file_paths_Ch1_calibration = (r'FILE_PATH_AND_NAME.asc')
 df_Ch1_calibration = pd.read_csv(file_paths_Ch1_calibration, skiprows=26, on_bad_lines='warn')
 df_Ch1_calibration_column1 = df_Ch1_calibration.columns[0]
 x_df_Ch1_calibration_column1 = df_Ch1_calibration.index / 5 / 60
 
 # STEP 3: 
 file_paths_Ch2 = [
-    (r'C:\Users\bdavies2\OneDrive\Postdoc-Imperial\4 - Raw Data\GC\Li_titration\2024May\Ar_old_blank_Ch2_04.asc', '1 mAh plated', 'blue'), 
-    #          r'C:\Users\bdavies2\OneDrive\Postdoc-Imperial\4 - Raw Data\GC\Li_titration\2024May\Ar_old_blank_Ch2_05.asc', 
-     #         r'C:\Users\bdavies2\OneDrive\Postdoc-Imperial\4 - Raw Data\GC\Li_titration\2024May\Ar_old_blank_Ch2_06.asc',
-              (r'C:\Users\bdavies2\OneDrive\Postdoc-Imperial\4 - Raw Data\GC\Li_titration\2024May\Ar_old_blank_Ch2_07.asc', '1 mAh - replicate', 'lightblue'),
-              (r'C:\Users\bdavies2\OneDrive\Postdoc-Imperial\4 - Raw Data\GC\Li_titration\2024May\Ar_old_blank_Ch2_08.asc', 'argon + water', 'grey')]
+    (r'FILE_PATH_AND_NAME.asc', '1 mAh plated', 'blue'), 
+    #          r'FILE_PATH_AND_NAME.asc', 
+     #         r'FILE_PATH_AND_NAME.asc',
+              (r'FILE_PATH_AND_NAME.asc', '1 mAh - replicate', 'lightblue'),
+              (r'FILE_PATH_AND_NAME.asc', 'argon + water', 'grey')]
 
 # STEP 4: 
 # This is the calibration gas file path for Ch2
-file_paths_Ch2_calibration = (r'C:\Users\bdavies2\OneDrive\Research\Collaboration stuff\Romain\calibrationgas1000ppm_chan2_04.asc')
+file_paths_Ch2_calibration = (r'FILE_PATH_AND_NAME.asc')
 df_Ch2_calibration = pd.read_csv(file_paths_Ch2_calibration, skiprows=26, on_bad_lines='warn')
 df_Ch2_calibration_column1 = df_Ch2_calibration.columns[0]
 x_df_Ch2_calibration_column1 = df_Ch2_calibration.index / 5 / 60
